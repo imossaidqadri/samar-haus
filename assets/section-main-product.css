@@ -1578,6 +1578,7 @@ a.product__text {
   .product__media-wrapper {
     flex: 1 !important;
     max-width: none !important;
+    padding-right: 2rem !important;
   }
 
   /* Product details - fixed width, sticky */
@@ -1627,7 +1628,8 @@ a.product__text {
   .global-media-settings {
     aspect-ratio: 1 / 1 !important;
     overflow: hidden !important;
-    border-radius: 4px !important;
+    border-radius: 0 !important;
+    border: none !important;
     width: 100% !important;
     height: auto !important;
     position: relative !important;
@@ -1645,6 +1647,8 @@ a.product__text {
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
+    border: none !important;
+    border-radius: 0 !important;
   }
 
   /* Remove any special styling for is-active class */
