@@ -54,8 +54,9 @@
 >
   
   
+  
   <!-- Main Gallery Wrapper -->
-  <div class="aakam-main-gallery">
+  <div class="aakam-main-gallery" id="main-gallery">
   
   <div id="GalleryStatus-{{ section.id }}" class="visually-hidden" role="status"></div>
   <slider-component id="GalleryViewer-{{ section.id }}" class="slider-mobile-gutter">
@@ -186,28 +187,3 @@
   </div> <!-- Close aakam-main-gallery -->
 </media-gallery>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Get all thumbnail buttons
-  const thumbButtons = document.querySelectorAll('.aakam-thumb-btn');
-  
-  // Add click handlers to thumbnails
-  thumbButtons.forEach((thumb, index) => {
-    thumb.addEventListener('click', function() {
-      const target = this.getAttribute('data-target');
-      
-      // Remove active state from all thumbnails
-      thumbButtons.forEach(btn => btn.classList.remove('aakam-thumb-active'));
-      
-      // Add active state to clicked thumbnail
-      this.classList.add('aakam-thumb-active');
-      
-      // Find and click the existing thumbnail in the original gallery
-      const existingThumbnail = document.querySelector(`.thumbnail[data-target="${target}"]`);
-      if (existingThumbnail) {
-        existingThumbnail.click();
-      }
-    });
-  });
-});
-</script>
