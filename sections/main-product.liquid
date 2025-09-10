@@ -197,11 +197,28 @@
                   {{- block.settings.text -}}
                 </p>
               {%- when 'title' -%}
-                <div class="mb-6" {{ block.shopify_attributes }}>
-                  <h1 class="text-xl font-medium text-gray-900 leading-tight">
+                <div class="aakam-title-section" {{ block.shopify_attributes }}>
+                  <h1 class="aakam-product-title">
                     {{ product.title | escape }}
                   </h1>
                 </div>
+
+                <style>
+                  .aakam-title-section {
+                    margin-bottom: 24px;
+                  }
+
+                  .aakam-product-title {
+                    font-family: "Yantramanav", sans-serif;
+                    font-size: 38px;
+                    font-weight: 300;
+                    letter-spacing: 0.5px;
+                    line-height: 1.1;
+                    color: #000;
+                    margin: 0;
+                    text-transform: uppercase;
+                  }
+                </style>
               {%- when 'description' -%}
                 {%- if product.description != blank -%}
                   <div class="product__description rte quick-add-hidden" {{ block.shopify_attributes }}>
@@ -210,16 +227,45 @@
                 {%- endif -%}
 
               {%- when 'price' -%}
-                <div id="price-{{ section.id }}" class="mb-6 border-b border-gray-100 pb-4" role="status" {{ block.shopify_attributes }}>
-                  <div class="text-right">
+                <div id="price-{{ section.id }}" class="aakam-price-section" role="status" {{ block.shopify_attributes }}>
+                  <div class="aakam-price-container">
                     {%- if product.compare_at_price > product.price -%}
-                      <span class="text-sm text-gray-400 line-through block">{{ product.compare_at_price | money }}</span>
-                      <span class="text-lg font-medium text-gray-900">{{ product.price | money }}</span>
+                      <span class="aakam-price-compare">{{ product.compare_at_price | money }}</span>
+                      <span class="aakam-price-current">{{ product.price | money }}</span>
                     {%- else -%}
-                      <span class="text-lg font-medium text-gray-900">{{ product.price | money }}</span>
+                      <span class="aakam-price-current">{{ product.price | money }}</span>
                     {%- endif -%}
                   </div>
                 </div>
+
+                <style>
+                  .aakam-price-section {
+                    margin-bottom: 24px;
+                    padding-bottom: 16px;
+                    border-bottom: 1px solid #e5e5e5;
+                  }
+
+                  .aakam-price-container {
+                    text-align: right;
+                  }
+
+                  .aakam-price-compare {
+                    font-family: "Yantramanav", sans-serif;
+                    font-size: 13px;
+                    font-weight: 300;
+                    color: #999;
+                    text-decoration: line-through;
+                    display: block;
+                    margin-bottom: 4px;
+                  }
+
+                  .aakam-price-current {
+                    font-family: "Yantramanav", sans-serif;
+                    font-size: 18px;
+                    font-weight: 400;
+                    color: #000;
+                  }
+                </style>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
                     <span>{{ 'products.product.volume_pricing.note' | t }}</span>

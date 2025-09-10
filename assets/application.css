@@ -991,18 +991,27 @@ video {
   line-height: 1.75rem !important;
 }
 
+.text-xl {
+  font-size: 38px !important;
+  line-height: 1.2 !important;
+}
+
 .text-sm {
-  font-size: 0.875rem !important;
-  line-height: 1.25rem !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
 }
 
 .text-xs {
-  font-size: 0.75rem !important;
-  line-height: 1rem !important;
+  font-size: 13px !important;
+  line-height: 1.5 !important;
 }
 
 .font-light {
   font-weight: 300 !important;
+}
+
+.font-regular {
+  font-weight: 400 !important;
 }
 
 .font-medium {
@@ -1011,6 +1020,10 @@ video {
 
 .font-semibold {
   font-weight: 600 !important;
+}
+
+.font-bold {
+  font-weight: 700 !important;
 }
 
 .uppercase {

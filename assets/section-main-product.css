@@ -3,6 +3,19 @@ product-info {
   display: block;
 }
 
+/* AAKAM Style Enhancements */
+.product__info-wrapper {
+  font-family: "Yantramanav", sans-serif;
+}
+
+.aakam-sidebar-spacing > * {
+  margin-bottom: 20px;
+}
+
+.aakam-sidebar-spacing > *:last-child {
+  margin-bottom: 0;
+}
+
 .product {
   margin: 0;
 }

@@ -71,41 +71,130 @@
             endif
           -%}
           
-          <!-- Quantity and Total Line -->
-          <div class="flex justify-between items-center py-3 border-t border-gray-100">
-            <span class="text-sm font-medium text-gray-900 uppercase">TOTAL(Qty)</span>
-            <span class="text-sm text-gray-600">1 (0 pcs)</span>
+          <!-- Quantity and Total Line - AAKAM Style -->
+          <div class="aakam-total-section">
+            <span class="aakam-total-label">TOTAL(QTY)</span>
+            <span class="aakam-total-value">1 (0 pcs)</span>
           </div>
+
+          <style>
+            .aakam-total-section {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 16px 0;
+              border-top: 1px solid #e5e5e5;
+            }
+
+            .aakam-total-label {
+              font-family: "Yantramanav", sans-serif;
+              font-size: 13px;
+              font-weight: 400;
+              letter-spacing: 1px;
+              text-transform: uppercase;
+              color: #000;
+            }
+
+            .aakam-total-value {
+              font-family: "Yantramanav", sans-serif;
+              font-size: 13px;
+              font-weight: 300;
+              color: #666;
+            }
+          </style>
           
-          <button
-            id="ProductSubmitButton-{{ section_id }}"
-            type="submit"
-            name="add"
-            class="w-full bg-white border border-gray-300 text-gray-900 py-3 px-4 rounded-md text-sm font-medium hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-gray-400 transition-colors"
-            {% if product.selected_or_first_available_variant.available == false
-              or quantity_rule_soldout
-              or product.selected_or_first_available_variant == null
-            %}
-              disabled
-            {% endif %}
-          >
-            <span>
-              {%- if product.selected_or_first_available_variant == null -%}
-                UNAVAILABLE
-              {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
-                SOLD OUT
-              {%- else -%}
-                ADD TO CART
-              {%- endif -%}
-            </span>
-          </button>
-          
-          <!-- Heart Icon for Wishlist -->
-          <button type="button" class="w-full border border-gray-300 py-3 px-4 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-1 focus:ring-gray-400 transition-colors">
-            <svg class="w-5 h-5 mx-auto text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-            </svg>
-          </button>
+          <!-- Add to Cart and Wishlist Buttons Side by Side - AAKAM Style -->
+          <div class="aakam-button-container">
+            <button
+              id="ProductSubmitButton-{{ section_id }}"
+              type="submit"
+              name="add"
+              class="aakam-add-to-cart-btn"
+              {% if product.selected_or_first_available_variant.available == false
+                or quantity_rule_soldout
+                or product.selected_or_first_available_variant == null
+              %}
+                disabled
+              {% endif %}
+            >
+              <span>
+                {%- if product.selected_or_first_available_variant == null -%}
+                  UNAVAILABLE
+                {%- elsif product.selected_or_first_available_variant.available == false or quantity_rule_soldout -%}
+                  SOLD OUT
+                {%- else -%}
+                  ADD TO CART
+                {%- endif -%}
+              </span>
+            </button>
+            
+            <!-- Heart Icon for Wishlist - AAKAM Style -->
+            <button type="button" class="aakam-wishlist-btn">
+              <svg class="aakam-heart-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+              </svg>
+            </button>
+          </div>
+
+          <style>
+            .aakam-button-container {
+              display: flex;
+              gap: 8px;
+              margin-top: 16px;
+            }
+
+            .aakam-add-to-cart-btn {
+              flex: 1;
+              background: white;
+              border: 1px solid #000;
+              color: #000;
+              padding: 12px 16px;
+              font-family: "Yantramanav", sans-serif;
+              font-size: 13px;
+              font-weight: 400;
+              letter-spacing: 0.5px;
+              text-transform: uppercase;
+              cursor: pointer;
+              transition: all 0.2s ease;
+            }
+
+            .aakam-add-to-cart-btn:hover {
+              background: #000;
+              color: white;
+            }
+
+            .aakam-add-to-cart-btn:disabled {
+              opacity: 0.6;
+              cursor: not-allowed;
+            }
+
+            .aakam-wishlist-btn {
+              width: 48px;
+              height: 48px;
+              background: white;
+              border: 1px solid #000;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              cursor: pointer;
+              transition: all 0.2s ease;
+            }
+
+            .aakam-wishlist-btn:hover {
+              background: #000;
+            }
+
+            .aakam-wishlist-btn:hover .aakam-heart-icon {
+              stroke: white;
+            }
+
+            .aakam-heart-icon {
+              width: 20px;
+              height: 20px;
+              stroke: #000;
+              transition: stroke 0.2s ease;
+            }
+          </style>
         </div>
       {%- endform -%}
     </product-form>
