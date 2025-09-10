@@ -1579,57 +1579,38 @@ a.product__text {
     flex: 1 !important;
     max-width: none !important;
     padding-right: 2rem !important;
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
   }
 
-  /* AAKAM Vertical Thumbnails */
+  /* Remove grid spacing from media wrapper */
+  .product__media-wrapper.grid__item {
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* AAKAM Media Gallery */
   .aakam-media-gallery {
-    display: flex !important;
-    gap: 0.5rem !important;
-    align-items: flex-start !important;
-  }
-
-  .aakam-vertical-thumbnails {
-    display: flex !important;
-    flex-direction: column !important;
-    gap: 0.75rem !important;
-    width: 80px !important;
-    flex-shrink: 0 !important;
-    margin-top: 0 !important;
-  }
-
-  .aakam-thumb-btn {
-    width: 80px !important;
-    height: 80px !important;
-    border: 2px solid transparent !important;
-    background: none !important;
-    padding: 0 !important;
-    cursor: pointer !important;
-    overflow: hidden !important;
-    transition: all 0.2s ease !important;
-    border-radius: 4px !important;
-  }
-
-  .aakam-thumb-btn:hover {
-    border-color: #ccc !important;
-  }
-
-  .aakam-thumb-btn.aakam-thumb-active {
-    border-color: #000 !important;
-  }
-
-  .aakam-thumb-btn img {
-    width: 100% !important;
-    height: 100% !important;
-    object-fit: cover !important;
     display: block !important;
-    position: static !important;
+    margin: 0 !important;
+    padding: 0 !important;
   }
+
+  /* Ensure media-gallery element itself has no spacing */
+  media-gallery {
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
 
   .aakam-main-gallery {
     flex: 1 !important;
     min-width: 0 !important;
     margin: 0 !important;
     padding: 0 !important;
+    margin-left: 0 !important;
+    padding-left: 0 !important;
   }
 
   /* Remove any margins/padding that create blank space */
@@ -1644,6 +1625,20 @@ a.product__text {
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
+    display: block !important;
+  }
+
+  /* Specifically target the thumbnail slider to completely remove it */
+  .aakam-main-gallery .thumbnail-slider {
+    display: none !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    height: 0 !important;
+  }
+
+  /* Remove any spacing between slider components */
+  .aakam-main-gallery slider-component + slider-component {
+    margin-top: 0 !important;
   }
 
   .aakam-main-gallery .product__media-list {
@@ -1658,12 +1653,6 @@ a.product__text {
     width: 100% !important;
   }
 
-  /* Hide original horizontal thumbnails on desktop */
-  @media screen and (min-width: 750px) {
-    .thumbnail-slider {
-      display: none !important;
-    }
-  }
 
   /* Product details - fixed width, sticky */
   .product__info-wrapper {
@@ -1702,7 +1691,7 @@ a.product__text {
   .product__media-item:first-child {
     width: 100% !important;
     max-width: 100% !important;
-    margin-bottom: 1rem !important;
+    margin-bottom: 0 !important;
     display: block !important;
     flex: none !important;
   }

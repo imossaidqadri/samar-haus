@@ -57,11 +57,15 @@
     line-height: calc(1 + 0.3 / var(--font-body-scale));
   }
 
-  .list-menu__item--link {
+  .list-menu__item--link,
+  .header__inline-menu .list-menu__item,
+  .header__inline-menu .header__menu-item {
     text-decoration: none;
     padding-bottom: 1rem;
     padding-top: 1rem;
     line-height: calc(1 + 0.8 / var(--font-body-scale));
+    font-weight: 300 !important;
+    color: #000000 !important;
   }
 
   @media screen and (min-width: 750px) {
