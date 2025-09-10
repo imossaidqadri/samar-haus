@@ -1,0 +1,66 @@
+{% comment %}
+  Renders product variant-picker
+
+  Accepts:
+  - product: {Object} product object.
+  - block: {Object} passing the block information.
+  - product_form_id: {String} Id of the product form to which the variant picker is associated.
+  Usage:
+  {% render 'product-variant-picker', product: product, block: block, product_form_id: product_form_id %}
+{% endcomment %}
+{%- unless product.has_only_default_variant -%}
+  <variant-selects
+    id="variant-selects-{{ section.id }}"
+    data-section="{{ section.id }}"
+    {{ block.shopify_attributes }}
+  >
+    {%- for option in product.options_with_values -%}
+      {%- liquid
+        assign swatch_count = option.values | map: 'swatch' | compact | size
+        assign picker_type = block.settings.picker_type
+
+        if swatch_count > 0 and block.settings.swatch_shape != 'none'
+          if block.settings.picker_type == 'dropdown'
+            assign picker_type = 'swatch_dropdown'
+          else
+            assign picker_type = 'swatch'
+          endif
+        endif
+      -%}
+      
+      {%- comment -%} Only show SIZE option, hide Color/other options to match Korean reference {%- endcomment -%}
+      {%- if option.name contains 'Size' or option.name contains 'SIZE' or option.name contains 'size' -%}
+        <div class="enhanced-size-selector">
+          <label class="size-selector-label">SIZE</label>
+          <div class="size-selector-wrapper">
+            <select
+              id="Option-{{ section.id }}-{{ forloop.index0 }}"
+              class="size-selector-dropdown"
+              name="options[{{ option.name | escape }}]"
+              form="{{ product_form_id }}"
+            >
+              <option value="" disabled {% unless option.selected_value %}selected{% endunless %}>
+                - Please select size -
+              </option>
+              {% render 'product-variant-options',
+                product: product,
+                option: option,
+                block: block,
+                picker_type: 'dropdown'
+              %}
+            </select>
+            <span class="size-dropdown-arrow">
+              {{- 'icon-caret.svg' | inline_asset_content -}}
+            </span>
+          </div>
+        </div>
+      {%- else -%}
+        {%- comment -%} All non-size options hidden to match Korean reference {%- endcomment -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    <script type="application/json" data-selected-variant>
+      {{ product.selected_or_first_available_variant | json }}
+    </script>
+  </variant-selects>
+{%- endunless -%}

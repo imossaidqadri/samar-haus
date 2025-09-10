@@ -1,0 +1,623 @@
+{{ 'component-card.css' | asset_url | stylesheet_tag }}
+{{ 'component-price.css' | asset_url | stylesheet_tag }}
+
+{%- style -%}
+  /* SAMAR HAUS FONTS - Use theme variables only */
+  .shop-all-wrapper,
+  .shop-all-wrapper *,
+  .shop-all-wrapper p,
+  .shop-all-wrapper a,
+  .shop-all-wrapper span {
+    font-family: var(--font-body-family) !important;
+  }
+
+  /* Headings use heading font */
+  .shop-all-wrapper h1,
+  .shop-all-wrapper h2,
+  .shop-all-wrapper h3 {
+    font-family: var(--font-heading-family) !important;
+  }
+
+  /* Most elements use body font */
+  .collection-number,
+  .product-title-grid,
+  .product-title-grid a,
+  .price-current-grid,
+  .price-original-grid,
+  .product-badge-grid,
+  .empty-collection {
+    font-family: var(--font-body-family) !important;
+  }
+
+  .shop-all-wrapper {
+    padding: 40px 0 !important;
+    background: #f8f8f8 !important; /* Match samar-haus background */
+  }
+
+  /* Hide page title completely */
+  .shop-all-title {
+    display: none !important;
+  }
+
+  .collection-section {
+    margin-bottom: 60px !important;
+  }
+
+  /* Collection header - EXACT MATCH */
+  .collection-header {
+    margin: 0 !important;
+    padding: 20px 0 20px 20px !important;
+    border: none !important;
+    background: transparent !important;
+    border-radius: 0 !important;
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+    font-family: var(--font-body-family) !important;
+    text-align: left !important;
+    margin-bottom: 30px !important; /* Reduced from 40px */
+  }
+
+  /* Full-width line above */
+  .collection-header::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 1px !important;
+    background: #ddd !important; /* Lighter line like original */
+    width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+  }
+
+  /* Full-width line below */
+  .collection-header::after {
+    content: '' !important;
+    position: absolute !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    height: 1px !important;
+    background: #ddd !important; /* Lighter line like original */
+    width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+  }
+
+  .collection-number {
+    font-size: 0.8rem !important; /* Smaller like original */
+    font-weight: 400 !important;
+    color: #666 !important; /* Lighter color */
+    margin-right: 8px !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    font-family: var(--font-body-family) !important;
+    display: inline !important;
+  }
+
+  .collection-name {
+    font-size: 0.8rem !important; /* Smaller like original */
+    font-weight: 400 !important;
+    color: #333 !important;
+    margin: 0 !important;
+    letter-spacing: 1px !important;
+    background: transparent !important;
+    padding: 0 !important;
+    border-radius: 0 !important;
+    font-family: var(--font-body-family) !important; /* Use body font, not heading */
+    text-transform: uppercase !important;
+    display: inline !important;
+  }
+
+  .collection-header:hover {
+    border: none !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+
+  /* Product grid - MATCH ORIGINAL EXACTLY */
+  .products-grid-container {
+    position: relative !important;
+    padding: 0 20px !important;
+  }
+
+  .products-grid {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 15px !important; /* Reduced gap like original */
+    margin-bottom: 20px !important;
+  }
+
+  /* Product cards - MINIMAL FLAT DESIGN like original */
+  .product-card-grid {
+    background: transparent !important; /* No white background */
+    border-radius: 0 !important; /* No rounded corners */
+    overflow: hidden !important;
+    transition: none !important; /* No hover animations */
+    position: relative !important;
+    font-family: var(--font-body-family) !important;
+    border: none !important;
+    box-shadow: none !important;
+  }
+
+  .product-card-grid:hover {
+    transform: none !important; /* No hover movement */
+    box-shadow: none !important; /* No hover shadow */
+  }
+
+  .product-image-link {
+    position: relative !important;
+    display: block !important;
+  }
+
+  .product-image-grid {
+    width: 100% !important;
+    aspect-ratio: 3/4 !important;
+    object-fit: cover !important;
+    transition: none !important; /* No image scaling on hover */
+  }
+
+  .product-card-grid:hover .product-image-grid {
+    transform: none !important; /* No hover scaling */
+  }
+
+  /* EXACT BADGE MATCH - Dark badges like original */
+  .product-badge-grid {
+    position: absolute !important;
+    top: 8px !important; /* Closer to top like original */
+    left: 8px !important; /* Closer to left like original */
+    padding: 4px 8px !important; /* Smaller padding */
+    font-size: 0.6rem !important; /* Much smaller text */
+    font-weight: 400 !important; /* Normal weight, not bold */
+    border-radius: 0 !important; /* No rounded corners */
+    z-index: 10 !important;
+    text-transform: lowercase !important; /* "sold out" not "SOLD OUT" */
+    letter-spacing: 0 !important; /* No letter spacing */
+    box-shadow: none !important; /* No shadow */
+    font-family: var(--font-body-family) !important;
+    background: rgba(0, 0, 0, 0.8) !important; /* Dark background like original */
+    color: white !important;
+  }
+
+  .badge-sale-grid {
+    background: rgba(0, 0, 0, 0.8) !important; /* Dark like original */
+    color: white !important;
+  }
+
+  .badge-sold-out-grid {
+    background: rgba(0, 0, 0, 0.8) !important; /* Dark like original */
+    color: white !important;
+  }
+
+  /* Product info - MINIMAL STYLING */
+  .product-info-grid {
+    padding: 12px 0 !important; /* Less padding, no horizontal padding */
+    background: transparent !important;
+  }
+
+  /* Product titles - EXACT MATCH */
+  .product-title-grid {
+    font-size: 0.75rem !important; /* Much smaller like original */
+    font-weight: 400 !important;
+    margin-bottom: 4px !important; /* Less margin */
+    color: #333 !important;
+    line-height: 1.2 !important; /* Tighter line height */
+    height: auto !important; /* No fixed height */
+    overflow: visible !important; /* Show full text */
+    display: block !important; /* Normal display */
+    -webkit-line-clamp: none !important;
+    -webkit-box-orient: initial !important;
+    font-family: var(--font-body-family) !important;
+    text-transform: uppercase !important; /* Match original */
+    letter-spacing: 0.5px !important; /* Slight letter spacing */
+  }
+
+  .product-title-grid a {
+    font-family: var(--font-body-family) !important;
+    text-decoration: none !important;
+    color: #333 !important;
+    font-size: inherit !important;
+    text-transform: inherit !important;
+    letter-spacing: inherit !important;
+  }
+
+  .product-title-grid a:hover {
+    color: #666 !important; /* Subtle hover color */
+  }
+
+  /* Price styling - MATCH ORIGINAL */
+  .product-price-grid {
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important; /* Smaller gap */
+    margin-bottom: 0 !important;
+  }
+
+  .price-current-grid {
+    font-size: 0.75rem !important; /* Same size as title */
+    font-weight: 400 !important; /* Normal weight */
+    color: #333 !important;
+    font-family: var(--font-body-family) !important;
+  }
+
+  .price-original-grid {
+    font-size: 0.75rem !important; /* Same size */
+    color: #999 !important;
+    text-decoration: line-through !important;
+    font-family: var(--font-body-family) !important;
+  }
+
+  .empty-collection {
+    text-align: center !important;
+    padding: 40px !important;
+    color: #666 !important;
+    font-style: italic !important;
+    font-family: var(--font-body-family) !important;
+  }
+
+  /* Mobile responsive - MAINTAIN ORIGINAL PROPORTIONS */
+  @media screen and (max-width: 768px) {
+    .shop-all-wrapper {
+      padding: 20px 15px !important;
+    }
+    
+    .products-grid-container {
+      padding: 0 15px !important;
+    }
+    
+    .products-grid {
+      grid-template-columns: repeat(2, 1fr) !important;
+      gap: 12px !important; /* Smaller gap on mobile */
+    }
+    
+    .collection-header {
+      padding: 15px 0 !important;
+      margin-bottom: 25px !important;
+    }
+
+    .product-title-grid {
+      font-size: 0.7rem !important; /* Even smaller on mobile */
+    }
+
+    .price-current-grid,
+    .price-original-grid {
+      font-size: 0.7rem !important;
+    }
+  }
+
+  @media screen and (max-width: 480px) {
+    .shop-all-wrapper {
+      padding: 20px 12px !important;
+    }
+    
+    .products-grid-container {
+      padding: 0 12px !important;
+    }
+
+    .products-grid {
+      gap: 10px !important; /* Even tighter on small screens */
+    }
+  }
+
+  @media (min-width: 769px) and (max-width: 1200px) {
+    .products-grid {
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 12px !important;
+    }
+    
+    .products-grid-container {
+      padding: 0 25px !important;
+    }
+  }
+
+  /* ADDITIONAL MATCH REFINEMENTS */
+  
+  /* Remove any remaining card effects */
+  .product-card-grid * {
+    transition: none !important;
+  }
+
+  /* Ensure flat appearance */
+  .product-card-grid,
+  .product-card-grid:before,
+  .product-card-grid:after {
+    box-shadow: none !important;
+    border: none !important;
+    background: transparent !important;
+  }
+
+  /* Typography consistency */
+  .shop-all-wrapper * {
+    font-smooth: auto !important;
+    -webkit-font-smoothing: auto !important;
+    -moz-osx-font-smoothing: auto !important;
+  }
+  /* NUCLEAR CSS APPROACH - Maximum Specificity Override */
+
+/* Product titles - MAXIMUM SPECIFICITY */
+.shop-all-wrapper .products-grid-container .products-grid .product-card-grid .product-info-grid .product-title-grid,
+.shop-all-wrapper .products-grid-container .products-grid .product-card-grid .product-info-grid .product-title-grid a,
+.shop-all-wrapper .product-title-grid,
+.shop-all-wrapper .product-title-grid a,
+div.shop-all-wrapper .product-title-grid,
+div.shop-all-wrapper .product-title-grid a {
+  font-size: 12px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  font-weight: 400 !important;
+  color: #333 !important;
+  line-height: 1.2 !important;
+  margin-bottom: 4px !important;
+  font-family: var(--font-body-family) !important;
+  display: block !important;
+  height: auto !important;
+  overflow: visible !important;
+  -webkit-line-clamp: none !important;
+  -webkit-box-orient: initial !important;
+}
+
+/* Collection names - MAXIMUM SPECIFICITY */
+.shop-all-wrapper .collection-section .collection-header .collection-name,
+div.shop-all-wrapper .collection-header .collection-name,
+.shop-all-wrapper .collection-name {
+  font-size: 11px !important;
+  text-transform: uppercase !important;
+  letter-spacing: 1px !important;
+  font-weight: 400 !important;
+  color: #333 !important;
+  font-family: var(--font-body-family) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  background: transparent !important;
+  border-radius: 0 !important;
+  display: inline !important;
+}
+
+/* Collection numbers - MAXIMUM SPECIFICITY */
+.shop-all-wrapper .collection-section .collection-header .collection-number,
+div.shop-all-wrapper .collection-header .collection-number,
+.shop-all-wrapper .collection-number {
+  font-size: 11px !important;
+  font-weight: 400 !important;
+  color: #666 !important;
+  margin-right: 8px !important;
+  font-family: var(--font-body-family) !important;
+  background: transparent !important;
+  padding: 0 !important;
+  border-radius: 0 !important;
+  display: inline !important;
+}
+
+/* Prices - MAXIMUM SPECIFICITY */
+.shop-all-wrapper .products-grid-container .products-grid .product-card-grid .product-info-grid .product-price-grid .price-current-grid,
+.shop-all-wrapper .price-current-grid,
+div.shop-all-wrapper .price-current-grid {
+  font-size: 12px !important;
+  font-weight: 400 !important;
+  color: #333 !important;
+  font-family: var(--font-body-family) !important;
+}
+
+.shop-all-wrapper .products-grid-container .products-grid .product-card-grid .product-info-grid .product-price-grid .price-original-grid,
+.shop-all-wrapper .price-original-grid,
+div.shop-all-wrapper .price-original-grid {
+  font-size: 12px !important;
+  color: #999 !important;
+  text-decoration: line-through !important;
+  font-family: var(--font-body-family) !important;
+}
+
+/* Badges - MAXIMUM SPECIFICITY */
+.shop-all-wrapper .products-grid-container .products-grid .product-card-grid .product-image-link .product-badge-grid,
+.shop-all-wrapper .product-badge-grid,
+div.shop-all-wrapper .product-badge-grid {
+  position: absolute !important;
+  top: 8px !important;
+  left: 8px !important;
+  padding: 4px 8px !important;
+  font-size: 9px !important;
+  font-weight: 400 !important;
+  border-radius: 0 !important;
+  z-index: 10 !important;
+  text-transform: lowercase !important;
+  letter-spacing: 0 !important;
+  box-shadow: none !important;
+  font-family: var(--font-body-family) !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  color: white !important;
+}
+
+/* HOVER EFFECTS - ADD THESE TO YOUR EXISTING CSS */
+
+/* Cards - FLAT DESIGN + HOVER EFFECTS */
+.shop-all-wrapper .products-grid-container .products-grid .product-card-grid,
+.shop-all-wrapper .product-card-grid,
+div.shop-all-wrapper .product-card-grid {
+  background: transparent !important;
+  border-radius: 0 !important;
+  overflow: hidden !important;
+  transition: transform 0.3s ease, box-shadow 0.3s ease !important; /* Re-enable transitions */
+  position: relative !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* HOVER EFFECTS - Beautiful card interactions */
+.shop-all-wrapper .product-card-grid:hover,
+div.shop-all-wrapper .product-card-grid:hover {
+  transform: translateY(-5px) !important; /* Lift card on hover */
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15) !important; /* Add shadow on hover */
+}
+
+/* Images - HOVER SCALING */
+.shop-all-wrapper .product-image-grid,
+div.shop-all-wrapper .product-image-grid {
+  width: 100% !important;
+  aspect-ratio: 3/4 !important;
+  object-fit: cover !important;
+  transition: transform 0.3s ease !important; /* Re-enable image transitions */
+}
+
+.shop-all-wrapper .product-card-grid:hover .product-image-grid,
+div.shop-all-wrapper .product-card-grid:hover .product-image-grid {
+  transform: scale(1.05) !important; /* Subtle image zoom on hover */
+}
+
+/* TEXT HOVER EFFECTS */
+.shop-all-wrapper .product-title-grid a:hover,
+div.shop-all-wrapper .product-title-grid a:hover {
+  color: #666 !important; /* Subtle color change on hover */
+  transition: color 0.2s ease !important;
+}
+
+/* SMOOTH TRANSITIONS FOR ALL INTERACTIVE ELEMENTS */
+.shop-all-wrapper .product-title-grid a,
+div.shop-all-wrapper .product-title-grid a {
+  transition: color 0.2s ease !important;
+}
+
+/* ENHANCED HOVER - Optional: Add subtle background on card hover */
+.shop-all-wrapper .product-card-grid:hover,
+div.shop-all-wrapper .product-card-grid:hover {
+  background: rgba(255, 255, 255, 0.8) !important; /* Very subtle white background on hover */
+  border-radius: 4px !important; /* Slight rounding on hover only */
+}
+
+/* BADGE HOVER EFFECTS */
+.shop-all-wrapper .product-card-grid:hover .product-badge-grid,
+div.shop-all-wrapper .product-card-grid:hover .product-badge-grid {
+  background: rgba(0, 0, 0, 0.9) !important; /* Slightly more opaque on hover */
+}
+
+/* PRICE HOVER EFFECTS */
+.shop-all-wrapper .product-card-grid:hover .price-current-grid,
+div.shop-all-wrapper .product-card-grid:hover .price-current-grid {
+  color: #000 !important; /* Darker price on hover */
+}
+
+/* PERFORMANCE OPTIMIZATION - GPU acceleration for smooth animations */
+.shop-all-wrapper .product-card-grid,
+.shop-all-wrapper .product-image-grid,
+div.shop-all-wrapper .product-card-grid,
+div.shop-all-wrapper .product-image-grid {
+  will-change: transform !important;
+  backface-visibility: hidden !important;
+}
+
+.shop-all-wrapper .product-card-grid:hover .product-image-grid,
+div.shop-all-wrapper .product-card-grid:hover .product-image-grid {
+  transform: none !important;
+}
+{%- endstyle -%}
+
+<div class="shop-all-wrapper page-width">
+  <h1 class="shop-all-title">Shop All Collections</h1>
+  
+  {%- liquid
+    assign collection_counter = 0
+  -%}
+
+  {%- for block in section.blocks -%}
+    {%- unless block.settings.collection == blank or block.settings.collection.products.size == 0 -%}
+      {%- assign collection_counter = collection_counter | plus: 1 -%}
+      {%- assign collection = block.settings.collection -%}
+      
+      <div class="collection-section" {{ block.shopify_attributes }}>
+        <div class="collection-header">
+          <span class="collection-number">
+            {%- if collection_counter < 10 -%}0{%- endif -%}{{ collection_counter }}
+          </span>
+          <h2 class="collection-name">{{ collection.title }}</h2>
+        </div>
+
+        <div class="products-grid-container" data-collection="{{ collection.handle }}">
+          <div class="products-grid">
+            {%- for product in collection.products limit: 12 -%}
+              <div class="product-card-grid">
+                <a href="{{ product.url }}" class="product-image-link">
+                  {%- if product.available == false -%}
+                    <div class="product-badge-grid badge-sold-out-grid">
+                      sold out
+                    </div>
+                  {%- elsif product.compare_at_price > product.price -%}
+                    <div class="product-badge-grid badge-sale-grid">
+                      sale
+                    </div>
+                  {%- endif -%}
+
+                  {%- if product.featured_media -%}
+                    <img 
+                      src="{{ product.featured_media | image_url: width: 350 }}"
+                      alt="{{ product.featured_media.alt | escape }}"
+                      class="product-image-grid"
+                      loading="lazy"
+                    >
+                  {%- else -%}
+                    <div class="product-image-grid" style="background: #f5f5f5; display: flex; align-items: center; justify-content: center; color: #999; font-size: 0.8rem;">
+                      No Image
+                    </div>
+                  {%- endif -%}
+                </a>
+
+                <div class="product-info-grid">
+                  <h3 class="product-title-grid">
+                    <a href="{{ product.url }}">{{ product.title }}</a>
+                  </h3>
+                  
+                  <div class="product-price-grid">
+                    <span class="price-current-grid">
+                      {{ product.price | money }}
+                    </span>
+                    {%- if product.compare_at_price > product.price -%}
+                      <span class="price-original-grid">
+                        {{ product.compare_at_price | money }}
+                      </span>
+                    {%- endif -%}
+                  </div>
+                </div>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
+    {%- endunless -%}
+  {%- endfor -%}
+
+  {%- if section.blocks.size == 0 -%}
+    <div class="empty-collection">
+      <p>No collections selected. Add collection blocks in the theme editor.</p>
+    </div>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Shop All Collections",
+  "class": "section",
+  "max_blocks": 10,
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop All Collections",
+      "blocks": [
+        {
+          "type": "collection"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

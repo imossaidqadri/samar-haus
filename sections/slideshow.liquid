@@ -1,0 +1,637 @@
+<!-- sections/tailwind-slideshow.liquid -->
+
+<section class="relative w-full h-screen overflow-hidden bg-gray-900" id="slideshow-{{ section.id }}">
+  <!-- Slideshow Container -->
+  <div class="relative w-full h-full flex" id="container-{{ section.id }}" style="will-change: transform; transition: transform 800ms cubic-bezier(0.25, 0.46, 0.45, 0.94); transform: translate3d(0, 0, 0);">
+    {%- for block in section.blocks -%}
+      <div class="min-w-full h-full relative flex items-center justify-center flex-shrink-0" data-slide="{{ forloop.index0 }}">
+        <!-- Background Image -->
+        {%- if block.settings.image -%}
+          {{
+            block.settings.image
+            | image_url: width: 1920
+            | image_tag: 
+              class: 'absolute inset-0 w-full h-full object-cover',
+              alt: block.settings.heading,
+              loading: 'lazy'
+          }}
+        {%- else -%}
+          <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-500 to-purple-600"></div>
+        {%- endif -%}
+        
+        <!-- Overlay -->
+        <div class="absolute inset-0 bg-black bg-opacity-40"></div>
+        
+        <!-- Content -->
+        <div class="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 {{ block.settings.text_alignment }}">
+          <div class="bg-black bg-opacity-50 backdrop-blur-sm rounded-xl p-6 sm:p-8 lg:p-12">
+            {%- if block.settings.heading != blank -%}
+              <h2 class="text-2xl sm:text-4xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+                {{ block.settings.heading }}
+              </h2>
+            {%- endif -%}
+            
+            {%- if block.settings.subheading != blank -%}
+              <p class="text-sm sm:text-lg lg:text-xl text-gray-200 mb-6 sm:mb-8 leading-relaxed max-w-2xl">
+                {{ block.settings.subheading }}
+              </p>
+            {%- endif -%}
+            
+            {%- if block.settings.button_label != blank -%}
+              <a href="{{ block.settings.button_link | default: '#' }}" 
+                 class="inline-block bg-white text-gray-900 px-6 sm:px-8 py-3 sm:py-4 rounded-lg font-semibold text-sm sm:text-base hover:bg-gray-100 transform hover:scale-105 transition-all duration-200 shadow-lg">
+                {{ block.settings.button_label }}
+              </a>
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <!-- Mobile Navigation (Bottom) -->
+  <div class="absolute bottom-4 left-0 right-0 z-20 block sm:hidden">
+    <!-- Mobile Controls -->
+    <div class="flex flex-col items-center space-y-3">
+      <!-- Slide Indicators -->
+      <div class="flex space-x-2" id="indicators-{{ section.id }}">
+        {%- for block in section.blocks -%}
+          <button class="w-2 h-2 rounded-full transition-all duration-200 indicator-btn {% if forloop.first %}bg-white{% else %}bg-white bg-opacity-50{% endif %}" 
+                  data-slide="{{ forloop.index0 }}"
+                  data-slideshow="{{ section.id }}"
+                  onclick="SlideshowManager.goToSlide('{{ section.id }}', {{ forloop.index0 }})">
+          </button>
+        {%- endfor -%}
+      </div>
+      
+      <!-- Mobile Button Row -->
+      <div class="flex items-center space-x-3 bg-black bg-opacity-50 backdrop-blur-sm rounded-full px-4 py-2">
+        <!-- Previous -->
+        <button class="w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center hover:bg-white transition-all duration-200" 
+                onclick="SlideshowManager.previousSlide('{{ section.id }}')">
+          <svg class="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+
+        <!-- Counter -->
+        <div class="text-white text-sm font-medium px-3" id="counter-{{ section.id }}">
+          1 / {{ section.blocks.size }}
+        </div>
+
+        <!-- Next -->
+        <button class="w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center hover:bg-white transition-all duration-200" 
+                onclick="SlideshowManager.nextSlide('{{ section.id }}')">
+          <svg class="w-4 h-4 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+
+        <!-- Play/Pause -->
+        <button class="w-10 h-10 bg-white bg-opacity-90 rounded-full flex items-center justify-center hover:bg-white transition-all duration-200" 
+                onclick="SlideshowManager.toggleAutoplay('{{ section.id }}')" id="autoplay-{{ section.id }}">
+          <svg class="w-4 h-4 text-gray-900" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop Navigation (Right Bottom) -->
+  <div class="absolute bottom-6 right-6 z-20 hidden sm:block">
+    <div class="flex flex-col items-end space-y-3">
+      <!-- Desktop Controls -->
+      <div class="flex items-center space-x-3 bg-black bg-opacity-40 backdrop-blur-md rounded-full px-4 py-3 shadow-lg">
+        <!-- Previous Button -->
+        <button class="w-11 h-11 bg-white bg-opacity-90 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-200 shadow-md" 
+                onclick="SlideshowManager.previousSlide('{{ section.id }}')">
+          <svg class="w-5 h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+          </svg>
+        </button>
+
+        <!-- Next Button -->
+        <button class="w-11 h-11 bg-white bg-opacity-90 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-200 shadow-md" 
+                onclick="SlideshowManager.nextSlide('{{ section.id }}')">
+          <svg class="w-5 h-5 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+          </svg>
+        </button>
+
+        <!-- Play/Pause Button -->
+        <button class="w-11 h-11 bg-white bg-opacity-90 rounded-full flex items-center justify-center hover:bg-white hover:scale-110 transition-all duration-200 shadow-md" 
+                onclick="SlideshowManager.toggleAutoplay('{{ section.id }}')" id="desktop-autoplay-{{ section.id }}">
+          <svg class="w-5 h-5 text-gray-900" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+          </svg>
+        </button>
+      </div>
+      
+      <!-- Desktop Slide Indicators -->
+      <div class="flex space-x-2" id="desktop-indicators-{{ section.id }}">
+        {%- for block in section.blocks -%}
+          <button class="w-3 h-3 rounded-full transition-all duration-200 indicator-btn {% if forloop.first %}bg-white scale-125{% else %}bg-white bg-opacity-60 hover:bg-white hover:bg-opacity-90{% endif %} shadow-sm" 
+                  data-slide="{{ forloop.index0 }}"
+                  data-slideshow="{{ section.id }}"
+                  onclick="SlideshowManager.goToSlide('{{ section.id }}', {{ forloop.index0 }})">
+          </button>
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  <!-- Desktop Counter (Top Right) -->
+  <div class="absolute top-6 right-6 z-20 hidden sm:block">
+    <div class="bg-black bg-opacity-40 backdrop-blur-sm text-white px-4 py-2 rounded-full text-sm font-medium" id="desktop-counter-{{ section.id }}">
+      1 / {{ section.blocks.size }}
+    </div>
+  </div>
+
+  <!-- Mobile Height Adjuster -->
+  <style>
+    @media (max-width: 640px) {
+      #slideshow-{{ section.id }} {
+        height: 70vh;
+        min-height: 400px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      #slideshow-{{ section.id }} {
+        height: 60vh;
+        min-height: 350px;
+      }
+    }
+
+    /* Enhanced smooth transitions */
+    #container-{{ section.id }} {
+      backface-visibility: hidden;
+      perspective: 1000px;
+      transform-style: preserve-3d;
+    }
+    
+    #container-{{ section.id }} > div {
+      backface-visibility: hidden;
+      transform: translateZ(0);
+    }
+    
+    /* Smooth indicator transitions */
+    .indicator-btn {
+      transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      backface-visibility: hidden;
+    }
+    
+    /* Button hover improvements */
+    button {
+      transform: translateZ(0);
+      backface-visibility: hidden;
+    }
+  </style>
+
+  <!-- Initialize this specific slideshow -->
+  <script>
+    // Initialize this specific slideshow when the section loads
+    (function() {
+      const sectionId = '{{ section.id }}';
+      const totalSlides = {{ section.blocks.size }};
+      const autoRotate = {{ section.settings.auto_rotate | default: true }};
+      const slideSpeed = {{ section.settings.change_slides_speed | default: 5 }};
+      
+      // Wait for DOM to be ready and SlideshowManager to be available
+      function initWhenReady() {
+        if (typeof SlideshowManager !== 'undefined' && document.getElementById(`slideshow-${sectionId}`)) {
+          // Small delay to ensure smooth initialization
+          requestAnimationFrame(() => {
+            SlideshowManager.init(sectionId, {
+              totalSlides: totalSlides,
+              autoRotate: autoRotate,
+              slideSpeed: slideSpeed
+            });
+          });
+        } else {
+          setTimeout(initWhenReady, 30);
+        }
+      }
+      
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initWhenReady);
+      } else {
+        initWhenReady();
+      }
+    })();
+  </script>
+</section>
+
+<!-- Global Slideshow Manager (only include once) -->
+<script>
+window.SlideshowManager = window.SlideshowManager || (function() {
+  const slideshows = {};
+  let touchStartX = null;
+  let touchStartY = null;
+  let activeSlideshowId = null;
+  
+  function init(sectionId, options) {
+    if (slideshows[sectionId]) {
+      // Clear existing interval if reinitializing
+      if (slideshows[sectionId].autoplayInterval) {
+        clearInterval(slideshows[sectionId].autoplayInterval);
+      }
+    }
+    
+    slideshows[sectionId] = {
+      currentSlide: 0,
+      totalSlides: options.totalSlides,
+      isPlaying: options.autoRotate,
+      autoplayInterval: null,
+      isTransitioning: false,
+      slideSpeed: options.slideSpeed * 1000
+    };
+    
+    console.log(`Slideshow ${sectionId} initialized with ${options.totalSlides} slides`);
+    
+    if (slideshows[sectionId].isPlaying) {
+      startAutoplay(sectionId);
+    }
+    
+    // Set initial transform for smooth loading
+    const container = document.getElementById(`container-${sectionId}`);
+    if (container) {
+      container.style.transform = 'translate3d(0%, 0, 0)';
+    }
+    
+    updateSlideshow(sectionId);
+  }
+  
+  function updateSlideshow(sectionId) {
+    const slideshow = slideshows[sectionId];
+    if (!slideshow) return;
+    
+    const container = document.getElementById(`container-${sectionId}`);
+    const mobileIndicators = document.querySelectorAll(`#indicators-${sectionId} .indicator-btn`);
+    const desktopIndicators = document.querySelectorAll(`#desktop-indicators-${sectionId} .indicator-btn`);
+    const mobileCounter = document.getElementById(`counter-${sectionId}`);
+    const desktopCounter = document.getElementById(`desktop-counter-${sectionId}`);
+    
+    if (!container) {
+      console.error(`Container not found for slideshow ${sectionId}`);
+      return;
+    }
+    
+    // Update container transform with hardware acceleration
+    const translateX = -(slideshow.currentSlide * 100);
+    container.style.transform = `translate3d(${translateX}%, 0, 0)`;
+    
+    // Update mobile indicators
+    mobileIndicators.forEach((indicator, index) => {
+      indicator.classList.remove('bg-white', 'bg-opacity-50');
+      if (index === slideshow.currentSlide) {
+        indicator.classList.add('bg-white');
+      } else {
+        indicator.classList.add('bg-white', 'bg-opacity-50');
+      }
+    });
+    
+    // Update desktop indicators
+    desktopIndicators.forEach((indicator, index) => {
+      indicator.classList.remove('bg-white', 'scale-125', 'bg-opacity-60');
+      if (index === slideshow.currentSlide) {
+        indicator.classList.add('bg-white', 'scale-125');
+      } else {
+        indicator.classList.add('bg-white', 'bg-opacity-60');
+      }
+    });
+    
+    // Update counters
+    const counterText = `${slideshow.currentSlide + 1} / ${slideshow.totalSlides}`;
+    if (mobileCounter) mobileCounter.textContent = counterText;
+    if (desktopCounter) desktopCounter.textContent = counterText;
+  }
+  
+  function nextSlide(sectionId) {
+    const slideshow = slideshows[sectionId];
+    if (!slideshow || slideshow.isTransitioning) return;
+    
+    slideshow.isTransitioning = true;
+    slideshow.currentSlide = (slideshow.currentSlide + 1) % slideshow.totalSlides;
+    updateSlideshow(sectionId);
+    
+    setTimeout(() => {
+      if (slideshows[sectionId]) {
+        slideshows[sectionId].isTransitioning = false;
+      }
+    }, 800);
+  }
+  
+  function previousSlide(sectionId) {
+    const slideshow = slideshows[sectionId];
+    if (!slideshow || slideshow.isTransitioning) return;
+    
+    slideshow.isTransitioning = true;
+    slideshow.currentSlide = (slideshow.currentSlide - 1 + slideshow.totalSlides) % slideshow.totalSlides;
+    updateSlideshow(sectionId);
+    
+    setTimeout(() => {
+      if (slideshows[sectionId]) {
+        slideshows[sectionId].isTransitioning = false;
+      }
+    }, 800);
+  }
+  
+  function goToSlide(sectionId, slideIndex) {
+    const slideshow = slideshows[sectionId];
+    if (!slideshow || slideshow.isTransitioning || slideIndex === slideshow.currentSlide) return;
+    
+    slideshow.isTransitioning = true;
+    slideshow.currentSlide = slideIndex;
+    updateSlideshow(sectionId);
+    
+    setTimeout(() => {
+      if (slideshows[sectionId]) {
+        slideshows[sectionId].isTransitioning = false;
+      }
+    }, 800);
+  }
+  
+  function startAutoplay(sectionId) {
+    const slideshow = slideshows[sectionId];
+    if (!slideshow) return;
+    
+    if (slideshow.autoplayInterval) {
+      clearInterval(slideshow.autoplayInterval);
+    }
+    
+    slideshow.autoplayInterval = setInterval(() => {
+      if (slideshow.isPlaying && !slideshow.isTransitioning) {
+        nextSlide(sectionId);
+      }
+    }, slideshow.slideSpeed);
+  }
+  
+  function toggleAutoplay(sectionId) {
+    const slideshow = slideshows[sectionId];
+    if (!slideshow) return;
+    
+    const mobileButton = document.getElementById(`autoplay-${sectionId}`);
+    const desktopButton = document.getElementById(`desktop-autoplay-${sectionId}`);
+    
+    slideshow.isPlaying = !slideshow.isPlaying;
+    
+    const pauseIcon = '<svg class="w-4 h-4 text-gray-900 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/></svg>';
+    const playIcon = '<svg class="w-4 h-4 text-gray-900 sm:w-5 sm:h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+    
+    if (slideshow.isPlaying) {
+      if (mobileButton) mobileButton.innerHTML = pauseIcon;
+      if (desktopButton) desktopButton.innerHTML = pauseIcon;
+      startAutoplay(sectionId);
+    } else {
+      if (mobileButton) mobileButton.innerHTML = playIcon;
+      if (desktopButton) desktopButton.innerHTML = playIcon;
+      if (slideshow.autoplayInterval) {
+        clearInterval(slideshow.autoplayInterval);
+      }
+    }
+  }
+  
+  // Touch/Swipe support
+  function handleTouchStart(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    
+    // Find which slideshow the touch started in
+    let target = e.target;
+    while (target && !target.id.startsWith('slideshow-')) {
+      target = target.parentElement;
+    }
+    if (target) {
+      activeSlideshowId = target.id.replace('slideshow-', '');
+      // Temporarily pause autoplay during touch interaction
+      const slideshow = slideshows[activeSlideshowId];
+      if (slideshow && slideshow.autoplayInterval) {
+        slideshow.wasAutoplayingBeforeTouch = slideshow.isPlaying;
+        if (slideshow.autoplayInterval) {
+          clearInterval(slideshow.autoplayInterval);
+        }
+      }
+    }
+  }
+  
+  function handleTouchEnd(e) {
+    if (!touchStartX || !activeSlideshowId) {
+      touchStartX = null;
+      touchStartY = null;
+      activeSlideshowId = null;
+      return;
+    }
+    
+    const slideshow = slideshows[activeSlideshowId];
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    const diffX = touchStartX - touchEndX;
+    const diffY = touchStartY - touchEndY;
+    
+    // Only trigger if horizontal swipe is more significant than vertical
+    if (Math.abs(diffX) > Math.abs(diffY) && Math.abs(diffX) > 40) {
+      e.preventDefault();
+      if (diffX > 0) {
+        nextSlide(activeSlideshowId);
+      } else {
+        previousSlide(activeSlideshowId);
+      }
+    }
+    
+    // Resume autoplay if it was playing before touch
+    if (slideshow && slideshow.wasAutoplayingBeforeTouch) {
+      setTimeout(() => {
+        if (slideshow.isPlaying) {
+          startAutoplay(activeSlideshowId);
+        }
+      }, 1000); // Resume after 1 second
+      slideshow.wasAutoplayingBeforeTouch = false;
+    }
+    
+    touchStartX = null;
+    touchStartY = null;
+    activeSlideshowId = null;
+  }
+  
+  // Keyboard navigation
+  function handleKeydown(e) {
+    // Only handle if no input is focused
+    if (document.activeElement.tagName.toLowerCase() === 'input' || 
+        document.activeElement.tagName.toLowerCase() === 'textarea') {
+      return;
+    }
+    
+    // Find the first slideshow on the page (you might want to improve this logic)
+    const firstSlideshow = document.querySelector('[id^="slideshow-"]');
+    if (!firstSlideshow) return;
+    
+    const sectionId = firstSlideshow.id.replace('slideshow-', '');
+    
+    if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      previousSlide(sectionId);
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      nextSlide(sectionId);
+    } else if (e.key === ' ') {
+      e.preventDefault();
+      toggleAutoplay(sectionId);
+    }
+  }
+  
+  // Pause all slideshows when page is hidden
+  function handleVisibilityChange() {
+    Object.keys(slideshows).forEach(sectionId => {
+      const slideshow = slideshows[sectionId];
+      if (document.hidden) {
+        if (slideshow.autoplayInterval) {
+          clearInterval(slideshow.autoplayInterval);
+        }
+      } else if (slideshow.isPlaying) {
+        startAutoplay(sectionId);
+      }
+    });
+  }
+  
+  // Initialize global event listeners (only once)
+  if (!window.slideshowManagerInitialized) {
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchend', handleTouchEnd, { passive: true });
+    document.addEventListener('keydown', handleKeydown);
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    window.slideshowManagerInitialized = true;
+  }
+  
+  // Public API
+  return {
+    init: init,
+    nextSlide: nextSlide,
+    previousSlide: previousSlide,
+    goToSlide: goToSlide,
+    toggleAutoplay: toggleAutoplay,
+    getSlideshows: () => slideshows
+  };
+})();
+</script>
+
+{% schema %}
+{
+  "name": "Tailwind Slideshow",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "select",
+      "id": "slide_height",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small (60vh)"
+        },
+        {
+          "value": "medium", 
+          "label": "Medium (80vh)"
+        },
+        {
+          "value": "large",
+          "label": "Large (90vh)"
+        },
+        {
+          "value": "full",
+          "label": "Full Screen (100vh)"
+        }
+      ],
+      "default": "full",
+      "label": "Desktop Height"
+    },
+    {
+      "type": "checkbox",
+      "id": "auto_rotate",
+      "label": "Auto-rotate slides",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "change_slides_speed",
+      "min": 3,
+      "max": 10,
+      "step": 1,
+      "unit": "s",
+      "label": "Change slides every",
+      "default": 5
+    }
+  ],
+  "blocks": [
+    {
+      "type": "slide",
+      "name": "Slide",
+      "limit": 10,
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "default": "Your Slide Title",
+          "label": "Heading"
+        },
+        {
+          "type": "textarea",
+          "id": "subheading",
+          "default": "Add your slide description here",
+          "label": "Subheading"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "default": "Shop Now",
+          "label": "Button label"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "select",
+          "id": "text_alignment",
+          "options": [
+            {
+              "value": "text-left",
+              "label": "Left"
+            },
+            {
+              "value": "text-center", 
+              "label": "Center"
+            },
+            {
+              "value": "text-right",
+              "label": "Right"
+            }
+          ],
+          "default": "text-center",
+          "label": "Text alignment"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Tailwind Slideshow",
+      "blocks": [
+        {
+          "type": "slide"
+        },
+        {
+          "type": "slide"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
