@@ -1569,7 +1569,7 @@ a.product__text {
 
   /* Product details - fixed width, sticky */
   .product__info-wrapper {
-    width: 350px !important;
+    width: 400px !important;
     flex-shrink: 0 !important;
     position: sticky !important;
     top: 2rem !important;

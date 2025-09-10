@@ -181,8 +181,7 @@
       <div class="product__info-wrapper grid__item{% if settings.page_width > 1400 and section.settings.media_size == "small" %} product__info-wrapper--extra-padding{% endif %}{% if settings.animations_reveal_on_scroll %} scroll-trigger animate--slide-in{% endif %}">
         <section
           id="ProductInfo-{{ section.id }}"
-          style="top:10.5rem; max-width: 40rem;margin-left: auto; margin-right: auto;"
-          class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %}"
+          class="product__info-container{% if section.settings.enable_sticky_info %} product__column-sticky{% endif %} space-y-6 bg-white border border-gray-100 p-6 rounded-lg"
         >
           {%- assign product_form_id = 'product-form-' | append: section.id -%}
 
@@ -198,15 +197,10 @@
                   {{- block.settings.text -}}
                 </p>
               {%- when 'title' -%}
-                <div class="product__title" {{ block.shopify_attributes }}>
-                  <h3>
-                    <strong>{{ product.title | escape }}</strong>
-                  </h3>
-                  <a href="{{ product.url }}" class="product__title">
-                    <h2 class="h1">
-                      <strong>{{ product.title | escape }}</strong>
-                    </h2>
-                  </a>
+                <div class="mb-6" {{ block.shopify_attributes }}>
+                  <h1 class="text-xl font-medium text-gray-900 leading-tight">
+                    {{ product.title | escape }}
+                  </h1>
                 </div>
               {%- when 'description' -%}
                 {%- if product.description != blank -%}
@@ -216,13 +210,15 @@
                 {%- endif -%}
 
               {%- when 'price' -%}
-                <div id="price-{{ section.id }}" role="status" {{ block.shopify_attributes }}>
-                  {%- render 'price',
-                    product: product,
-                    use_variant: true,
-                    show_badges: true,
-                    price_class: 'price--large'
-                  -%}
+                <div id="price-{{ section.id }}" class="mb-6 border-b border-gray-100 pb-4" role="status" {{ block.shopify_attributes }}>
+                  <div class="text-right">
+                    {%- if product.compare_at_price > product.price -%}
+                      <span class="text-sm text-gray-400 line-through block">{{ product.compare_at_price | money }}</span>
+                      <span class="text-lg font-medium text-gray-900">{{ product.price | money }}</span>
+                    {%- else -%}
+                      <span class="text-lg font-medium text-gray-900">{{ product.price | money }}</span>
+                    {%- endif -%}
+                  </div>
                 </div>
                 {%- if product.quantity_price_breaks_configured? -%}
                   <div class="volume-pricing-note" id="Volume-Note-{{ section.id }}">
@@ -787,10 +783,35 @@
                 {% render 'icon-with-text', block: block %}
             {%- endcase -%}
           {%- endfor -%}
-          <a href="{{ product.url }}" class="link product__view-details animate-arrow">
-            {{ 'products.product.view_full_details' | t }}
-            {{- 'icon-arrow.svg' | inline_asset_content -}}
-          </a>
+          
+          <!-- Material and Size Guide Expandable Sections -->
+          <div class="mt-6 space-y-1">
+            <!-- Material Section -->
+            <details class="group">
+              <summary class="flex justify-between items-center p-4 cursor-pointer border-b border-gray-100 hover:bg-gray-50">
+                <span class="text-sm font-medium text-gray-900 uppercase">MATERIAL</span>
+                <svg class="w-4 h-4 text-gray-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </summary>
+              <div class="p-4 text-sm text-gray-600">
+                <p>Material information will be displayed here when expanded.</p>
+              </div>
+            </details>
+            
+            <!-- Size Guide Section -->
+            <details class="group">
+              <summary class="flex justify-between items-center p-4 cursor-pointer border-b border-gray-100 hover:bg-gray-50">
+                <span class="text-sm font-medium text-gray-900 uppercase">SIZE GUIDE</span>
+                <svg class="w-4 h-4 text-gray-400 transition-transform group-open:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </summary>
+              <div class="p-4 text-sm text-gray-600">
+                <p>Size guide information will be displayed here when expanded.</p>
+              </div>
+            </details>
+          </div>
         </section>
       </div>
     </div>

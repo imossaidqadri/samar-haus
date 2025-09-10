@@ -11,9 +11,11 @@
       <link rel='icon' type='image/png' href='{{ settings.favicon | image_url: width: 32, height: 32 }}'>
     {%- endif -%}
 
-    {%- unless settings.type_header_font.system? and settings.type_body_font.system? -%}
-      <link rel='preconnect' href='https://fonts.shopifycdn.com' crossorigin>
-    {%- endunless -%}
+    
+    <!-- Yantramanav Font -->
+    <link rel='preconnect' href='https://fonts.googleapis.com'>
+    <link rel='preconnect' href='https://fonts.gstatic.com' crossorigin>
+    <link href='https://fonts.googleapis.com/css2?family=Yantramanav:wght@300;400;500;700&display=swap' rel='stylesheet'>
 
     <title>
       {{ page_title }}
@@ -32,19 +34,9 @@
 
     {% render 'meta-tags' %}
 
-    {%- liquid
-      assign body_font_bold = settings.type_body_font | font_modify: 'weight', 'bold'
-      assign body_font_italic = settings.type_body_font | font_modify: 'style', 'italic'
-      assign body_font_bold_italic = body_font_bold | font_modify: 'style', 'italic'
-    %}
 
     <!-- CRITICAL ZERO-CLS STYLES (MUST LOAD FIRST) -->
     {% style %}
-      {{ settings.type_body_font | font_face: font_display: 'swap' }}
-      {{ body_font_bold | font_face: font_display: 'swap' }}
-      {{ body_font_italic | font_face: font_display: 'swap' }}
-      {{ body_font_bold_italic | font_face: font_display: 'swap' }}
-      {{ settings.type_header_font | font_face: font_display: 'swap' }}
 
       {% for scheme in settings.color_schemes -%}
         {% assign scheme_classes = scheme_classes | append: ', .color-' | append: scheme.id %}
@@ -92,15 +84,15 @@
       }
 
       :root {
-        /* SAMAR HAUS FONT OVERRIDE - Replace original theme fonts */
-        --font-body-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Ubuntu, "Helvetica Neue", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        /* YANTRAMANAV FONT VARIABLES */
+        --font-body-family: "Yantramanav", sans-serif;
         --font-body-style: normal;
         --font-body-weight: 400;
-        --font-body-weight-bold: 600;
+        --font-body-weight-bold: 700;
 
-        --font-heading-family: "New York", "Iowan Old Style", "Apple Garamond", Baskerville, "Times New Roman", "Droid Serif", Times, "Source Serif Pro", serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+        --font-heading-family: "Yantramanav", sans-serif;
         --font-heading-style: normal;
-        --font-heading-weight: 400;
+        --font-heading-weight: 500;
 
         --font-body-scale: {{ settings.body_scale | divided_by: 100.0 }};
         --font-heading-scale: {{ settings.heading_scale | times: 1.0 | divided_by: settings.body_scale }};
@@ -247,48 +239,66 @@
         }
       } 
 
-      /* ===== SAMAR HAUS FONT IMPLEMENTATION ===== */
+      /* ===== YANTRAMANAV TYPOGRAPHY SYSTEM ===== */
       
-      /* Apply system fonts to all elements by default */
-      html, body, 
-      p, span, div, a, button,
-      .btn, .button,
-      input, textarea, select,
-      .card, .card *,
-      .card__content, .card__content *,
-      .card__information, .card__information *,
-      .price, .price *,
-      .grid__item, .grid__item *,
-      .product-item, .product-item *,
-      [class*="product"] *,
-      .card-wrapper, .card-wrapper *,
-      .caption, .subtitle, .text-body,
-      .header__menu-item, .header__submenu,
-      /* Tailwind utility overrides */
-      [class*="font-"], [class*="text-"],
-      .font-sans, .font-serif, .font-mono,
-      .text-base, .text-sm, .text-xs, .text-lg, .text-xl,
-      .text-2xl, .text-3xl, .text-4xl, .text-5xl, .text-6xl,
-      .font-thin, .font-extralight, .font-light, .font-normal,
-      .font-medium, .font-semibold, .font-bold, .font-extrabold,
-      .font-black {
-        font-family: var(--font-body-family) !important;
+      /* Font Weight Classes */
+      .font-light, .font-extralight { font-weight: 300; }
+      .font-normal, .font-regular { font-weight: 400; }
+      .font-medium { font-weight: 500; }
+      .font-semibold, .font-bold { font-weight: 700; }
+      .font-extrabold, .font-black { font-weight: 700; }
+      
+      /* Typography Hierarchy */
+      .header__heading, .header__heading a,
+      .site-title, .brand-name, .logo,
+      [class*="logo"], [class*="brand"] {
+        font-weight: 700;
+        letter-spacing: 0.05em;
       }
       
-      /* Apply serif fonts to all headings */
-      h1, h2, h3, h4, h5, h6,
-      .h0, .h1, .h2, .h3, .h4, .h5, .h6,
-      .hxxl, .hxl,
-      .card__heading, .card__heading a,
+      h1, .h1 { font-weight: 700; }
+      h2, .h2 { font-weight: 700; }
+      h3, .h3 { font-weight: 500; }
+      h4, .h4 { font-weight: 500; }
+      h5, .h5 { font-weight: 400; }
+      h6, .h6 { font-weight: 400; }
+      
+      .header__menu-item, .header__menu-item a,
+      .header__submenu, .header__submenu a,
+      .menu-drawer__menu-item,
+      .list-menu__item, .list-menu__item a {
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+      }
+      
+      /* Homepage Product Names - Regular Weight */
+      body.template-index .card__heading,
+      body.template-index .card__heading a,
+      body.template-index .font-medium {
+        font-weight: 400;
+      }
+      
+      /* Other Product Titles - Bold Weight */
+      body:not(.template-index) .card__heading,
+      body:not(.template-index) .card__heading a,
       .product-title,
-      [class*="heading"], [class*="title"],
-      .header__heading,
-      .section-heading,
-      .collection-title,
-      .page-title {
-        font-family: var(--font-heading-family) !important;
-        font-weight: var(--font-heading-weight) !important;
-        font-style: var(--font-heading-style) !important;
+      .collection-title {
+        font-weight: 700;
+      }
+      
+      .price, .price__regular, .price__sale,
+      .price-item, .price-item--regular, .price-item--sale {
+        font-weight: 700;
+      }
+      
+      .btn, .button, 
+      .product-form__buttons .btn,
+      .shopify-payment-button,
+      input[type="submit"] {
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
       }
 
       /* ===== ZERO CLS CRITICAL STYLES ===== */
@@ -486,12 +496,9 @@
     {{ 'base.css' | asset_url | stylesheet_tag }}
 
     <!-- FONT PRELOADING -->
-    {%- unless settings.type_body_font.system? -%}
-      <link rel='preload' as='font' href='{{ settings.type_body_font | font_url }}' type='font/woff2' crossorigin>
-    {%- endunless -%}
-    {%- unless settings.type_header_font.system? -%}
-      <link rel='preload' as='font' href='{{ settings.type_header_font | font_url }}' type='font/woff2' crossorigin>
-    {%- endunless -%}
+    <!-- Preload Yantramanav fonts -->
+    <link rel='preload' as='font' href='https://fonts.gstatic.com/s/yantramanav/v13/flU-Rqu5zY00QEpyWJYWN5-QXeNzDB41jg.woff2' type='font/woff2' crossorigin>
+    <link rel='preload' as='font' href='https://fonts.gstatic.com/s/yantramanav/v13/flU-Rqu5zY00QEpyWJYWN59zRMNzDB41jg.woff2' type='font/woff2' crossorigin>
 
     <!-- NON-CRITICAL CSS -->
     <link rel='stylesheet' href='{{ 'component-cart-items.css' | asset_url }}' media='print' onload="this.media='all'">

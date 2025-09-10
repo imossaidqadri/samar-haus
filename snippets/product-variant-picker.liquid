@@ -28,12 +28,9 @@
         endif
       -%}
       {%- if picker_type == 'swatch' -%}
-        <fieldset class="js product-form__input product-form__input--swatch">
-          <legend class="form__label">
-            {{ option.name }}:
-            <span data-selected-value>
-              {{- option.selected_value -}}
-            </span>
+        <fieldset class="mb-4">
+          <legend class="text-sm font-medium text-gray-900 mb-2 uppercase">
+            {{ option.name }}
           </legend>
           {% render 'product-variant-options',
             product: product,
@@ -43,8 +40,8 @@
           %}
         </fieldset>
       {%- elsif picker_type == 'button' -%}
-        <fieldset class="js product-form__input product-form__input--pill">
-          <legend class="form__label">{{ option.name }}</legend>
+        <fieldset class="mb-4">
+          <legend class="text-sm font-medium text-gray-900 mb-2 uppercase">{{ option.name }}</legend>
           {% render 'product-variant-options',
             product: product,
             option: option,
@@ -53,22 +50,14 @@
           %}
         </fieldset>
       {%- else -%}
-        <div class="product-form__input product-form__input--dropdown">
-          <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+        <div class="mb-4">
+          <label class="text-sm font-medium text-gray-900 mb-2 uppercase block" for="Option-{{ section.id }}-{{ forloop.index0 }}">
             {{ option.name }}
           </label>
-          <div class="select">
-            {%- if picker_type == 'swatch_dropdown' -%}
-              <span
-                data-selected-value
-                class="dropdown-swatch"
-              >
-                {% render 'swatch', swatch: option.selected_value.swatch, shape: block.settings.swatch_shape %}
-              </span>
-            {%- endif -%}
+          <div class="relative">
             <select
               id="Option-{{ section.id }}-{{ forloop.index0 }}"
-              class="select__select"
+              class="w-full p-3 pr-10 border border-gray-200 rounded-md bg-white text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 appearance-none"
               name="options[{{ option.name | escape }}]"
               form="{{ product_form_id }}"
             >
@@ -79,9 +68,11 @@
                 picker_type: picker_type
               %}
             </select>
-            <span class="svg-wrapper">
-              {{- 'icon-caret.svg' | inline_asset_content -}}
-            </span>
+            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+              <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </div>
           </div>
         </div>
       {%- endif -%}
