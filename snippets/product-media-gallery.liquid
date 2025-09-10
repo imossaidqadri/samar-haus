@@ -50,7 +50,41 @@
   {% endif %}
   aria-label="{{ 'products.product.media.gallery_viewer' | t }}"
   data-desktop-layout="{{ section.settings.gallery_layout }}"
+  class="aakam-media-gallery"
 >
+  
+  <!-- Vertical Thumbnail Navigation -->
+  <div class="aakam-vertical-thumbnails">
+    {%- if featured_media != null -%}
+      <button 
+        class="aakam-thumb-btn aakam-thumb-active" 
+        data-target="{{ section.id }}-{{ featured_media.id }}"
+        data-index="0"
+        aria-label="View image 1"
+      >
+        {{ featured_media.preview_image | image_url: width: 100 | image_tag: loading: 'lazy', alt: featured_media.alt }}
+      </button>
+    {%- endif -%}
+    
+    {%- assign thumb_index = 1 -%}
+    {%- for media in product.media -%}
+      {%- unless media.id == product.selected_or_first_available_variant.featured_media.id -%}
+        <button 
+          class="aakam-thumb-btn" 
+          data-target="{{ section.id }}-{{ media.id }}"
+          data-index="{{ thumb_index }}"
+          aria-label="View image {{ thumb_index | plus: 1 }}"
+        >
+          {{ media.preview_image | image_url: width: 100 | image_tag: loading: 'lazy', alt: media.alt }}
+        </button>
+        {%- assign thumb_index = thumb_index | plus: 1 -%}
+      {%- endunless -%}
+    {%- endfor -%}
+  </div>
+  
+  <!-- Main Gallery Wrapper -->
+  <div class="aakam-main-gallery">
+  
   <div id="GalleryStatus-{{ section.id }}" class="visually-hidden" role="status"></div>
   <slider-component id="GalleryViewer-{{ section.id }}" class="slider-mobile-gutter">
     <a class="skip-to-content-link button visually-hidden quick-add-hidden" href="#ProductInfo-{{ section.id }}">
@@ -329,4 +363,32 @@
       </button>
     </slider-component>
   {%- endif -%}
+  
+  </div> <!-- Close aakam-main-gallery -->
 </media-gallery>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Get all thumbnail buttons
+  const thumbButtons = document.querySelectorAll('.aakam-thumb-btn');
+  
+  // Add click handlers to thumbnails
+  thumbButtons.forEach((thumb, index) => {
+    thumb.addEventListener('click', function() {
+      const target = this.getAttribute('data-target');
+      
+      // Remove active state from all thumbnails
+      thumbButtons.forEach(btn => btn.classList.remove('aakam-thumb-active'));
+      
+      // Add active state to clicked thumbnail
+      this.classList.add('aakam-thumb-active');
+      
+      // Find and click the existing thumbnail in the original gallery
+      const existingThumbnail = document.querySelector(`.thumbnail[data-target="${target}"]`);
+      if (existingThumbnail) {
+        existingThumbnail.click();
+      }
+    });
+  });
+});
+</script>
