@@ -205,7 +205,9 @@
 
                 <style>
                   .aakam-title-section {
-                    margin-bottom: 24px;
+                    margin-bottom: 20px;
+                    padding-bottom: 20px;
+                    border-bottom: 1px solid #000;
                   }
 
                   .aakam-product-title {
@@ -229,23 +231,41 @@
               {%- when 'price' -%}
                 <div id="price-{{ section.id }}" class="aakam-price-section" role="status" {{ block.shopify_attributes }}>
                   <div class="aakam-price-container">
-                    {%- if product.compare_at_price > product.price -%}
-                      <span class="aakam-price-compare">{{ product.compare_at_price | money }}</span>
-                      <span class="aakam-price-current">{{ product.price | money }}</span>
-                    {%- else -%}
-                      <span class="aakam-price-current">{{ product.price | money }}</span>
-                    {%- endif -%}
+                    <span class="aakam-price-label">PRICE</span>
+                    <div class="aakam-price-values">
+                      {%- if product.compare_at_price > product.price -%}
+                        <span class="aakam-price-compare">{{ product.compare_at_price | money }}</span>
+                        <span class="aakam-price-current">{{ product.price | money }}</span>
+                      {%- else -%}
+                        <span class="aakam-price-current">{{ product.price | money }}</span>
+                      {%- endif -%}
+                    </div>
                   </div>
                 </div>
 
                 <style>
                   .aakam-price-section {
-                    margin-bottom: 24px;
-                    padding-bottom: 16px;
-                    border-bottom: 1px solid #e5e5e5;
+                    margin-bottom: 20px;
                   }
 
                   .aakam-price-container {
+                    display: flex;
+                    align-items: center;
+                    gap: 32px;
+                  }
+
+                  .aakam-price-label {
+                    font-family: "Yantramanav", sans-serif;
+                    font-size: 13px;
+                    font-weight: 400;
+                    letter-spacing: 0.8px;
+                    text-transform: uppercase;
+                    color: #000;
+                    white-space: nowrap;
+                    margin: 0;
+                  }
+
+                  .aakam-price-values {
                     text-align: right;
                   }
 
@@ -256,14 +276,15 @@
                     color: #999;
                     text-decoration: line-through;
                     display: block;
-                    margin-bottom: 4px;
+                    margin-bottom: 2px;
                   }
 
                   .aakam-price-current {
                     font-family: "Yantramanav", sans-serif;
-                    font-size: 18px;
+                    font-size: 16px;
                     font-weight: 400;
                     color: #000;
+                    letter-spacing: 0.3px;
                   }
                 </style>
                 {%- if product.quantity_price_breaks_configured? -%}

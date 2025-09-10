@@ -50,14 +50,14 @@
           %}
         </fieldset>
       {%- else -%}
-        <div class="mb-4">
-          <label class="text-sm font-medium text-gray-900 mb-2 uppercase block" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+        <div class="aakam-size-selector">
+          <label class="aakam-size-label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
             {{ option.name }}
           </label>
-          <div class="relative">
+          <div class="aakam-dropdown-wrapper">
             <select
               id="Option-{{ section.id }}-{{ forloop.index0 }}"
-              class="w-full p-3 pr-10 border border-gray-200 rounded-md bg-white text-sm focus:outline-none focus:ring-1 focus:ring-gray-400 appearance-none"
+              class="aakam-dropdown"
               name="options[{{ option.name | escape }}]"
               form="{{ product_form_id }}"
             >
@@ -68,13 +68,73 @@
                 picker_type: picker_type
               %}
             </select>
-            <div class="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
-              <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div class="aakam-dropdown-arrow">
+              <svg class="aakam-arrow-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
               </svg>
             </div>
           </div>
         </div>
+
+        <style>
+          .aakam-size-selector {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            width: 100%;
+          }
+
+          .aakam-size-label {
+            font-family: "Yantramanav", sans-serif;
+            font-size: 13px;
+            font-weight: 400;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            color: #000;
+            white-space: nowrap;
+            margin: 0;
+          }
+
+          .aakam-dropdown-wrapper {
+            position: relative;
+            flex: 0.8;
+          }
+
+          .aakam-dropdown {
+            width: 100%;
+            padding: 8px 12px;
+            padding-right: 32px;
+            border: 1px solid #000;
+            background: white;
+            font-family: "Yantramanav", sans-serif;
+            font-size: 13px;
+            font-weight: 300;
+            color: #000;
+            appearance: none;
+            cursor: pointer;
+            outline: none;
+          }
+
+          .aakam-dropdown:focus {
+            border-color: #000;
+          }
+
+          .aakam-dropdown-arrow {
+            position: absolute;
+            top: 50%;
+            right: 8px;
+            transform: translateY(-50%);
+            pointer-events: none;
+          }
+
+          .aakam-arrow-icon {
+            width: 16px;
+            height: 16px;
+            stroke: #000;
+            stroke-width: 1.5;
+          }
+        </style>
       {%- endif -%}
     {%- endfor -%}
 
