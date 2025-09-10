@@ -27,35 +27,63 @@
           endif
         endif
       -%}
-      
-      {%- comment -%} Only show SIZE option, hide Color/other options to match Korean reference {%- endcomment -%}
-      {%- if option.name contains 'Size' or option.name contains 'SIZE' or option.name contains 'size' -%}
-        <div class="enhanced-size-selector">
-          <label class="size-selector-label">SIZE</label>
-          <div class="size-selector-wrapper">
+      {%- if picker_type == 'swatch' -%}
+        <fieldset class="js product-form__input product-form__input--swatch">
+          <legend class="form__label">
+            {{ option.name }}:
+            <span data-selected-value>
+              {{- option.selected_value -}}
+            </span>
+          </legend>
+          {% render 'product-variant-options',
+            product: product,
+            option: option,
+            block: block,
+            picker_type: picker_type
+          %}
+        </fieldset>
+      {%- elsif picker_type == 'button' -%}
+        <fieldset class="js product-form__input product-form__input--pill">
+          <legend class="form__label">{{ option.name }}</legend>
+          {% render 'product-variant-options',
+            product: product,
+            option: option,
+            block: block,
+            picker_type: picker_type
+          %}
+        </fieldset>
+      {%- else -%}
+        <div class="product-form__input product-form__input--dropdown">
+          <label class="form__label" for="Option-{{ section.id }}-{{ forloop.index0 }}">
+            {{ option.name }}
+          </label>
+          <div class="select">
+            {%- if picker_type == 'swatch_dropdown' -%}
+              <span
+                data-selected-value
+                class="dropdown-swatch"
+              >
+                {% render 'swatch', swatch: option.selected_value.swatch, shape: block.settings.swatch_shape %}
+              </span>
+            {%- endif -%}
             <select
               id="Option-{{ section.id }}-{{ forloop.index0 }}"
-              class="size-selector-dropdown"
+              class="select__select"
               name="options[{{ option.name | escape }}]"
               form="{{ product_form_id }}"
             >
-              <option value="" disabled {% unless option.selected_value %}selected{% endunless %}>
-                - Please select size -
-              </option>
               {% render 'product-variant-options',
                 product: product,
                 option: option,
                 block: block,
-                picker_type: 'dropdown'
+                picker_type: picker_type
               %}
             </select>
-            <span class="size-dropdown-arrow">
+            <span class="svg-wrapper">
               {{- 'icon-caret.svg' | inline_asset_content -}}
             </span>
           </div>
         </div>
-      {%- else -%}
-        {%- comment -%} All non-size options hidden to match Korean reference {%- endcomment -%}
       {%- endif -%}
     {%- endfor -%}
 
