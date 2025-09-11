@@ -54,6 +54,7 @@
             disabled
           {% endif %}
           class="product-variant-id"
+          data-product-url="{{ product.url }}"
         >
 
         {%- if gift_card_recipient_feature_active -%}
@@ -216,6 +217,35 @@
         </div>
       {%- endform -%}
     </product-form>
+
+    <script>
+      // Ensure variant ID gets updated when variant selection changes
+      document.addEventListener('DOMContentLoaded', function() {
+        const variantSelects = document.querySelector('variant-selects[data-section="{{ section.id }}"]');
+        const variantIdInput = document.querySelector('#{{ product_form_id }} input[name="id"]');
+        
+        if (variantSelects && variantIdInput) {
+          variantSelects.addEventListener('change', function(event) {
+            // Get all selected options
+            const selectedOptions = Array.from(variantSelects.querySelectorAll('select option:checked, input:checked'));
+            const selectedValues = selectedOptions.map(option => option.value);
+            
+            // Find matching variant
+            const variants = {{ product.variants | json }};
+            const matchingVariant = variants.find(variant => {
+              return variant.options.every((option, index) => {
+                return selectedValues[index] === option;
+              });
+            });
+            
+            if (matchingVariant) {
+              variantIdInput.value = matchingVariant.id;
+              variantIdInput.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+          });
+        }
+      });
+    </script>
   {%- else -%}
     <div class="product-form">
       <div class="product-form__buttons form">

@@ -62,6 +62,7 @@
             loading="lazy"
             width="{{ card_product.featured_media.width }}"
             height="{{ card_product.featured_media.height }}"
+            sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw"
           >
 
           {%- comment -%} Secondary Image on Hover {%- endcomment -%}
@@ -82,6 +83,7 @@
               loading="lazy"
               width="{{ card_product.media[1].width }}"
               height="{{ card_product.media[1].height }}"
+              sizes="(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw"
             >
           {%- endif -%}
 
@@ -115,7 +117,7 @@
       {%- endif -%}
 
       {%- comment -%} Product Content {%- endcomment -%}
-      <div class="p-4 flex flex-col flex-grow">
+      <div class="p-4 flex flex-col flex-grow text-center">
         
         {%- comment -%} Vendor {%- endcomment -%}
         {%- if show_vendor -%}
@@ -123,7 +125,7 @@
         {%- endif -%}
 
         {%- comment -%} Product Title {%- endcomment -%}
-        <h3 class="text-lg font-medium text-neutral-900 mb-2 line-clamp-2 group-hover:text-neutral-700 transition-colors duration-200">
+        <h3 class="font-light text-neutral-900 mb-2 line-clamp-2 group-hover:text-neutral-700 transition-colors duration-200" style="font-size: 13px;">
           {{ card_product.title | escape }}
         </h3>
 
@@ -149,12 +151,12 @@
 
         {%- comment -%} Price {%- endcomment -%}
         <div class="mt-auto">
-          <div class="flex items-center space-x-2">
-            <span class="text-sm font-semibold text-neutral-900">
+          <div class="flex items-center justify-center space-x-2">
+            <span class="text-neutral-900" style="font-size: 13px; font-weight: 350;">
               {{ card_product.price | money }}
             </span>
             {%- if card_product.compare_at_price > card_product.price -%}
-              <span class="text-sm text-neutral-500 line-through">
+              <span class="text-neutral-500 line-through" style="font-size: 13px; font-weight: 350;">
                 {{ card_product.compare_at_price | money }}
               </span>
             {%- endif -%}
@@ -216,12 +218,12 @@
         {{ 'product-1' | placeholder_svg_tag: 'w-full h-full object-cover text-neutral-400' }}
       </div>
       
-      <div class="p-4 flex flex-col flex-grow">
-        <h3 class="font-medium text-neutral-900 mb-2">
+      <div class="p-4 flex flex-col flex-grow text-center">
+        <h3 class="font-light text-neutral-900 mb-2" style="font-size: 13px;">
           {{ 'onboarding.product_title' | t }}
         </h3>
         <div class="mt-auto">
-          <span class="text-lg font-semibold text-neutral-900">
+          <span class="text-neutral-900" style="font-size: 13px; font-weight: 350;">
             {{ 1999 | money }}
           </span>
         </div>

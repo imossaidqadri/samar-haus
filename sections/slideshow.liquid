@@ -13,7 +13,9 @@
             | image_tag: 
               class: 'absolute inset-0 w-full h-full object-cover',
               alt: block.settings.heading,
-              loading: 'lazy'
+              loading: 'lazy',
+              width: block.settings.image.width,
+              height: block.settings.image.height
           }}
         {%- else -%}
           <div class="absolute inset-0 w-full h-full bg-gradient-to-br from-blue-500 to-purple-600"></div>
@@ -150,17 +152,21 @@
 
   <!-- Mobile Height Adjuster -->
   <style>
-    @media (max-width: 640px) {
+    @media (min-width: 640px) {
       #slideshow-{{ section.id }} {
-        height: 70vh;
-        min-height: 400px;
+        aspect-ratio: 21/9;
       }
     }
     
-    @media (max-width: 480px) {
+    @media (min-width: 1024px) {
       #slideshow-{{ section.id }} {
-        height: 60vh;
-        min-height: 350px;
+        aspect-ratio: 2.4/1;
+      }
+    }
+    
+    @media (max-width: 639px) {
+      #slideshow-{{ section.id }} {
+        aspect-ratio: 4/3;
       }
     }
 

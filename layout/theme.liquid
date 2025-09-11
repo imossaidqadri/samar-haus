@@ -85,12 +85,12 @@
 
       :root {
         /* YANTRAMANAV FONT VARIABLES */
-        --font-body-family: "Yantramanav", sans-serif;
+        --font-body-family: "Yantramanav", "Yantramanav-fallback", sans-serif;
         --font-body-style: normal;
         --font-body-weight: 400;
         --font-body-weight-bold: 700;
 
-        --font-heading-family: "Yantramanav", sans-serif;
+        --font-heading-family: "Yantramanav", "Yantramanav-fallback", sans-serif;
         --font-heading-style: normal;
         --font-heading-weight: 500;
 
@@ -395,6 +395,7 @@
         contain: layout;
       }
 
+
       /* CRITICAL TAILWIND UTILITIES INLINE */
       .flex { display: flex !important; }
       .block { display: block !important; }
@@ -465,6 +466,33 @@
         opacity: 0;
       }
 
+      /* FONT FALLBACK METRICS TO PREVENT REFLOW */
+      @font-face {
+        font-family: 'Yantramanav-fallback';
+        size-adjust: 95%;
+        ascent-override: 95%;
+        descent-override: 25%;
+        line-gap-override: 0%;
+        src: local('Arial');
+      }
+
+      /* ADDITIONAL LAYOUT STABILITY */
+      .aspect-container {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+      }
+
+      .aspect-container > img,
+      .aspect-container > video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
       /* CART DRAWER STABILITY */
       .cart-drawer,
       .drawer {
@@ -482,6 +510,23 @@
       textarea,
       select {
         contain: layout;
+      }
+
+      /* PREVENT LOADING LAYOUT SHIFTS */
+      .banner__media,
+      .hero-media,
+      .slideshow__slide {
+        background: #f8f8f8;
+        min-height: 200px;
+      }
+
+      /* SMOOTH TRANSITIONS FOR CLS */
+      * {
+        will-change: auto;
+      }
+
+      .loading * {
+        animation-play-state: paused;
       }
     {% endstyle %}
 
